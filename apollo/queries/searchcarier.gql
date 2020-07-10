@@ -1,0 +1,7 @@
+query searchCarier($searchText: String!) {
+    searchCarier(carierText:$searchText) {
+      _id
+      name_organization
+      position
+    }
+}

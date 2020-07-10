@@ -1,0 +1,9 @@
+{
+  cariers {
+    _id
+    name_organization
+    salary
+    position
+    description
+  }
+}
