@@ -24,5 +24,6 @@ $ yarn generate
 4. install MongoDB dan juga install robomongo
 5. install nodejs terbaru
 6. install packge manager yarn, click  [disini](https://yarnpkg.com/) untuk install yarn.
+7. jalankan lokerproject dan lokerprojectapi secara bersamaan yang mana dulu sekarepe dewek seng penting jalan berdampingan.
 
 For detailed explanation on how things work, check out [Nuxt.js docs](https://nuxtjs.org).
