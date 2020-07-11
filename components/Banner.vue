@@ -16,7 +16,9 @@
             <div class="select is-fullwidth">
               <select>
                 <option>Pilih Lokasi</option>
-                <option>With options</option>
+                <option v-for="item in dataEducation" :key="item._id">
+                  {{ item.education }}
+                </option>
               </select>
             </div>
           </div>
@@ -79,7 +81,9 @@
             <div class="select is-fullwidth">
               <select>
                 <option>Pilih Pendidikan</option>
-                <option>With options</option>
+                <option v-for="item in dataEducation" :key="item._id">
+                  {{ item.education }}
+                </option>
               </select>
             </div>
           </div>
@@ -91,14 +95,21 @@
 </template>
 <script>
 import debounce from 'lodash/debounce'
-import query from '~/apollo/queries/searchcarier'
+// this is query graphql
+import queryCarier from '~/apollo/queries/searchcarier'
+import queryEducation from '~/apollo/queries/alleducation'
 export default {
+  /*
+  untuk setting dimana jika routenya /amp maka akan di tampilkan
+  template amp jika tanpa /amp maka yg akan di tampilkan layout non amp
+*/
   name: 'Banner',
   amp: 'hybrid',
   ampLayout: 'default.amp',
   data() {
     return {
       data: [],
+      dataEducation: [],
       selected: null,
       isFetching: false,
       name: '',
@@ -106,7 +117,16 @@ export default {
       totalPages: 1,
     }
   },
+  mounted() {
+    this.getEducation()
+  },
   methods: {
+    getEducation() {
+      this.$apollo.query({ query: queryEducation }).then(({ data }) => {
+        // do what you want with data
+        this.dataEducation = data.educations
+      })
+    },
     // You have to install and import debounce to use it,
     // it's not mandatory though.
     getAsyncData: debounce(function (name) {
@@ -130,10 +150,12 @@ export default {
       }
       this.isFetching = true
       this.name = name
+      /*
+        Apollo vue js. get filtered data, using query graph QL
+      */
       this.$apollo
         .query({
-          query,
-          prefetch: ({ route }) => ({ searchText: this.name }),
+          query: queryCarier,
           variables: {
             searchText: this.name,
           },
@@ -143,13 +165,13 @@ export default {
           data.searchCarier.forEach((item) => this.data.push(item))
         })
         .catch((error) => {
-          console.log(error)
           throw error
         })
         .finally(() => {
           this.isFetching = false
         })
     }, 500),
+    // fungsi di gunakan untuk infinte scroll.
     getMoreAsyncData: debounce(function () {
       this.getAsyncData(this.name)
     }, 250),

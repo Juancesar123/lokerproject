@@ -1,0 +1,6 @@
+{
+  educations {
+    _id
+    education
+  }
+}

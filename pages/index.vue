@@ -88,7 +88,7 @@
 import Navbar from '~/components/Navbar.vue'
 import Banner from '~/components/Banner.vue'
 import Footer from '~/components/Footer.vue'
-import query from '~/apollo/queries/allcarier'
+import queryCarier from '~/apollo/queries/allcarier'
 export default {
   amp: 'hybrid',
   ampLayout: 'default.amp',
@@ -108,7 +108,7 @@ export default {
   methods: {
     foo() {
       // but you could also call queries like this:
-      this.$apollo.query({ query }).then(({ data }) => {
+      this.$apollo.query({ query: queryCarier }).then(({ data }) => {
         // do what you want with data
         this.data = data.cariers
       })
