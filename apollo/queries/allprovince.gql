@@ -1,0 +1,9 @@
+{
+  provinces{
+    _id
+    province
+    city{
+      city
+    }
+  }
+}

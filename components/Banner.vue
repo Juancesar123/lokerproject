@@ -82,9 +82,23 @@
         <div class="columns">
           <div class="column">
             <div class="select is-fullwidth">
-              <select>
-                <option>Pilih Lokasi</option>
-                <option>With options</option>
+              <select v-model="province">
+                <option value="">Pilih Provinsi</option>
+                <optgroup
+                  v-for="item in dataProvince"
+                  :key="item._id"
+                  :value="item.province"
+                  :label="item.province"
+                  @select="(item) => (selected = item)"
+                >
+                  <option
+                    v-for="city in item.city"
+                    :key="city._id"
+                    :value="city.city"
+                    @select="(city) => (selected = city)"
+                    >{{ city.city }}</option
+                  >
+                </optgroup>
               </select>
             </div>
           </div>
@@ -141,6 +155,7 @@ import queryCarier from '~/apollo/queries/searchcarier'
 import queryEducation from '~/apollo/queries/alleducation'
 import queryComplexSearch from '~/apollo/queries/searchComplexCarier'
 import queryallposition from '~/apollo/queries/allposition'
+import queryallprovince from '~/apollo/queries/allprovince'
 export default {
   /*
   untuk setting dimana jika routenya /amp maka akan di tampilkan
@@ -154,10 +169,12 @@ export default {
       data: [],
       dataEducation: [],
       dataPosition: [],
+      dataProvince: [],
       selected: null,
       isFetching: false,
       name_organization: '',
       position: '',
+      province: '',
       education: '',
       name: '',
       page: 1,
@@ -167,6 +184,7 @@ export default {
   mounted() {
     this.getEducation()
     this.getPosition()
+    this.getProvince()
   },
   methods: {
     async searchCarier() {
@@ -188,6 +206,12 @@ export default {
       await this.$apollo.query({ query: queryallposition }).then(({ data }) => {
         // do what you want with data
         this.dataPosition = data.positions
+      })
+    },
+    async getProvince() {
+      await this.$apollo.query({ query: queryallprovince }).then(({ data }) => {
+        // do what you want with data
+        this.dataProvince = data.provinces
       })
     },
     async getEducation() {
