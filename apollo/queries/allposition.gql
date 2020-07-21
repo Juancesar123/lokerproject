@@ -1,0 +1,9 @@
+{
+  positions{
+    _id
+    position_parent
+    position_child_id{
+      position_child
+    }
+  }
+}

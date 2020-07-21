@@ -48,6 +48,7 @@
       <div class="group-field">
         <b-field>
           <b-autocomplete
+            v-model="name_organization"
             :data="data"
             placeholder="ketik nama perusahaan"
             field="name_organization"
@@ -58,6 +59,24 @@
             @infinite-scroll="getMoreAsyncData"
           >
             <template slot="empty">No results found</template>
+            <template slot-scope="props">
+              <div class="media">
+                <!-- <div class="media-left">
+                  <img
+                    width="32"
+                    :src="`https://image.tmdb.org/t/p/w500/${props.option.poster_path}`"
+                  />
+                </div> -->
+                <div class="media-content">
+                  {{ props.option.title }}
+                  <br />
+                  <small>
+                    Jabatan {{ props.option.position }},
+                    <b>{{ props.option.name_organization }}</b>
+                  </small>
+                </div>
+              </div>
+            </template>
           </b-autocomplete>
         </b-field>
         <div class="columns">
@@ -71,24 +90,53 @@
           </div>
           <div class="column">
             <div class="select is-fullwidth">
-              <select>
-                <option>Pilih Posisi</option>
-                <option>With options</option>
+              <select v-model="position">
+                <optgroup
+                  v-for="item in dataPosition"
+                  :key="item._id"
+                  :value="item.position_parent"
+                  :label="item.position_parent"
+                  @select="(item) => (selected = item)"
+                >
+                  <option
+                    v-for="child in item.position_child_id"
+                    :key="child._id"
+                    :value="child.position_parent"
+                    :label="child.position_parent"
+                    @select="(child) => (selected = child)"
+                    >{{ child.position_child }}</option
+                  >
+                </optgroup>
+                <!-- <option
+                  v-for="item in dataPosition"
+                  :key="item._id"
+                  :value="item.position_parent"
+                  @select="(item) => (selected = item)"
+                >
+                  {{ item.position_parent }}
+                </option> -->
               </select>
             </div>
           </div>
           <div class="column">
             <div class="select is-fullwidth">
-              <select>
-                <option>Pilih Pendidikan</option>
-                <option v-for="item in dataEducation" :key="item._id">
+              <select v-model="education">
+                <!-- <option :selected="education == 1">Pilih Pendidikan</option> -->
+                <option
+                  v-for="item in dataEducation"
+                  :key="item._id"
+                  :value="item.education"
+                  @select="(item) => (selected = item)"
+                >
                   {{ item.education }}
                 </option>
               </select>
             </div>
           </div>
         </div>
-        <button class="button is-link is-medium">Cari</button>
+        <button class="button is-link is-medium" @click="searchCarier()">
+          Cari
+        </button>
       </div>
     </section>
   </div>
@@ -98,6 +146,8 @@ import debounce from 'lodash/debounce'
 // this is query graphql
 import queryCarier from '~/apollo/queries/searchcarier'
 import queryEducation from '~/apollo/queries/alleducation'
+import queryComplexSearch from '~/apollo/queries/searchComplexCarier'
+import queryallposition from '~/apollo/queries/allposition'
 export default {
   /*
   untuk setting dimana jika routenya /amp maka akan di tampilkan
@@ -110,8 +160,12 @@ export default {
     return {
       data: [],
       dataEducation: [],
+      dataPosition: [],
       selected: null,
       isFetching: false,
+      name_organization: '',
+      position: '',
+      education: '1',
       name: '',
       page: 1,
       totalPages: 1,
@@ -119,10 +173,32 @@ export default {
   },
   mounted() {
     this.getEducation()
+    this.getPosition()
   },
   methods: {
-    getEducation() {
-      this.$apollo.query({ query: queryEducation }).then(({ data }) => {
+    async searchCarier() {
+      await this.$apollo
+        .query({
+          query: queryComplexSearch,
+          variables: {
+            name_organization: this.name_organization,
+            position: this.position,
+            education: this.education,
+          },
+        })
+        .then(({ data }) => {
+          // do what you want with data
+          console.log(data)
+        })
+    },
+    async getPosition() {
+      await this.$apollo.query({ query: queryallposition }).then(({ data }) => {
+        // do what you want with data
+        this.dataPosition = data.positions
+      })
+    },
+    async getEducation() {
+      await this.$apollo.query({ query: queryEducation }).then(({ data }) => {
         // do what you want with data
         this.dataEducation = data.educations
       })

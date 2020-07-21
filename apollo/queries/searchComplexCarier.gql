@@ -1,0 +1,10 @@
+query searchComplexCarier($name_organization: String!,$position:String!,$education:String!) {
+    searchComplexCarier(carierText:{name_organization:$name_organization,position:$position,education:$education}) {
+      _id
+      name_organization
+      education
+      location
+      description
+      position
+    }
+}
