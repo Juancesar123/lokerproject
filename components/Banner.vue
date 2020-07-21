@@ -91,6 +91,7 @@
           <div class="column">
             <div class="select is-fullwidth">
               <select v-model="position">
+                <option value="">Pilih Jabatan</option>
                 <optgroup
                   v-for="item in dataPosition"
                   :key="item._id"
@@ -107,21 +108,13 @@
                     >{{ child.position_child }}</option
                   >
                 </optgroup>
-                <!-- <option
-                  v-for="item in dataPosition"
-                  :key="item._id"
-                  :value="item.position_parent"
-                  @select="(item) => (selected = item)"
-                >
-                  {{ item.position_parent }}
-                </option> -->
               </select>
             </div>
           </div>
           <div class="column">
             <div class="select is-fullwidth">
               <select v-model="education">
-                <!-- <option :selected="education == 1">Pilih Pendidikan</option> -->
+                <option value="">Pilih Pendidikan</option>
                 <option
                   v-for="item in dataEducation"
                   :key="item._id"
@@ -165,7 +158,7 @@ export default {
       isFetching: false,
       name_organization: '',
       position: '',
-      education: '1',
+      education: '',
       name: '',
       page: 1,
       totalPages: 1,
