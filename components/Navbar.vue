@@ -32,8 +32,6 @@
       >
         <div class="navbar-start">
           <nuxt-link class="navbar-item" to="/">Beranda</nuxt-link>
-          <nuxt-link class="navbar-item" to="/">Cari Lowongan kerja</nuxt-link>
-
           <!-- <div class="navbar-item has-dropdown is-hoverable">
             <a class="navbar-link">
               More

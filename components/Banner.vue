@@ -87,7 +87,6 @@
                 <optgroup
                   v-for="item in dataProvince"
                   :key="item._id"
-                  :value="item.province"
                   :label="item.province"
                   @select="(item) => (selected = item)"
                 >
@@ -109,15 +108,14 @@
                 <optgroup
                   v-for="item in dataPosition"
                   :key="item._id"
-                  :value="item.position_parent"
                   :label="item.position_parent"
                   @select="(item) => (selected = item)"
                 >
                   <option
                     v-for="child in item.position_child_id"
                     :key="child._id"
-                    :value="child.position_parent"
-                    :label="child.position_parent"
+                    :value="child.position_child"
+                    :label="child.position_child"
                     @select="(child) => (selected = child)"
                     >{{ child.position_child }}</option
                   >
@@ -195,11 +193,13 @@ export default {
             name_organization: this.name_organization,
             position: this.position,
             education: this.education,
+            location: this.province,
           },
         })
         .then(({ data }) => {
+          this.$router.push('cari-loker')
           // do what you want with data
-          console.log(data)
+          this.$store.commit('setLoker', data)
         })
     },
     async getPosition() {

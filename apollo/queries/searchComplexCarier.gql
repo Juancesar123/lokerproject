@@ -1,5 +1,5 @@
-query searchComplexCarier($name_organization: String!,$position:String!,$education:String!) {
-    searchComplexCarier(carierText:{name_organization:$name_organization,position:$position,education:$education}) {
+query searchComplexCarier($name_organization: String!,$position:String!,$education:String!,$location:String!) {
+    searchComplexCarier(carierText:{name_organization:$name_organization,position:$position,education:$education,location:$location}) {
       _id
       name_organization
       education
